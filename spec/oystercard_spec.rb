@@ -3,6 +3,7 @@ require "oystercard"
 describe Oystercard do
   it { is_expected.to respond_to(:top_up).with(1).argument }
   it { is_expected.to respond_to(:deduct).with(1).argument }
+  it { is_expected.to respond_to(:in_journey?) }
 
   describe "#balance" do
     it "has a default balance of 0 when intiliazed" do
@@ -23,7 +24,11 @@ describe Oystercard do
         subject.deduct(-1*(Oystercard::MINIMUM_BALANCE)+subject.balance)
         expect { subject.deduct 1 }.to raise_error "Failed - you attempted to go below limit of #{Oystercard::MINIMUM_BALANCE}."
     end
+  describe "#in_journey?" do
+    it "is false when new oystercard is initalised" do
+      expect(subject.in_journey?).to be false
+    end
+end
 
     end
-
-  end
+end
