@@ -1,5 +1,4 @@
 class Oystercard
-
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = -3 # tests cannot handle posirive limits, needs to be 0 or negative
   MINIMUM_AMOUNT_TO_TOUCH_IN = 1
@@ -17,13 +16,9 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    below_min_limit?(amount)
-    @balance -= amount
-  end
-
   def touch_in
     sufficient_balance_to_touch_in
+    deduct(MINIMUM_AMOUNT_TO_TOUCH_IN)
     @in_journey = true
   end
 
@@ -32,10 +27,8 @@ class Oystercard
   end
 
   def in_journey?
-    return @in_journey
+    @in_journey
   end
-
-
 
   private
 
@@ -51,4 +44,8 @@ class Oystercard
     raise "Failed - you do not have minimunm balance of #{MINIMUM_AMOUNT_TO_TOUCH_IN}." if @balance < MINIMUM_AMOUNT_TO_TOUCH_IN
   end
 
+  def deduct(amount)
+    below_min_limit?(amount)
+    @balance -= amount
+  end
 end
