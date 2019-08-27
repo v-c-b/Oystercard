@@ -16,7 +16,7 @@ class Oystercard
   private
 
   def over_limit?(amount)
-    raise "You have reached your top-up limit." if @balance + amount > MAXIMUM_BALANCE
+    raise "You have reached your top-up limit of #{MAXIMUM_BALANCE}." if @balance + amount > MAXIMUM_BALANCE
   end
 
 end
