@@ -3,12 +3,10 @@ class Oystercard
   MINIMUM_BALANCE = -3 # tests cannot handle posirive limits, needs to be 0 or negative
   MINIMUM_AMOUNT_TO_TOUCH_IN = 1
 
-  attr_reader :balance
-  attr_reader :in_journey
+  attr_reader :balance, :entry_station
 
   def initialize
     @balance = 0
-    @in_journey = false
   end
 
   def top_up(amount)
@@ -16,18 +14,21 @@ class Oystercard
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(station)
     sufficient_balance_to_touch_in
     deduct(MINIMUM_AMOUNT_TO_TOUCH_IN)
-    @in_journey = true
+    @entry_station = station
   end
 
   def touch_out
-    @in_journey = false
+    @entry_station = nil
   end
 
   def in_journey?
-    @in_journey
+    if @entry_station != nil then
+      return true
+    else false
+    end
   end
 
   private
