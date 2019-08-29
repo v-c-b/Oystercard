@@ -15,7 +15,7 @@ end
 def fare
 
 return PENALTY_FARE if @journey[:entry_station] && !@journey[:exit_station]
-return PENALTY_FARE if !@journey[:entry_station] && !@journey[:complete]
+return PENALTY_FARE if !@journey[:entry_station] && @journey[:exit_station]
 1
 end
 
