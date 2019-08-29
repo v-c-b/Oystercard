@@ -44,9 +44,6 @@ describe Oystercard do
     expect(subject.journeys[-1].journey).to eq({entry_station: station, exit_station: station2, complete: true})
     end
 
-    it "accepts the entry station" do
-      expect(subject.entry_station).to eq(station)
-    end
     it "entry station is nil after touch_out" do
       subject.touch_out(station)
       expect(subject.entry_station).to be nil

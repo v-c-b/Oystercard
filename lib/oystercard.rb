@@ -19,25 +19,23 @@ class Oystercard
     sufficient_balance_to_touch_in
     deduct(@journeys[-1].fare) unless @journeys.empty?
     @journeys << Journey.new(station)
-    @entry_station = station
   end
 
   def touch_out(station)
-    @journeys << Journey.new(nil, station, true) if @journeys.empty?
-    @journeys << Journey.new(nil, station, true) if @journeys[-1].journey[:complete] == true
+    create_missing_journey(station)
     @journeys[-1].end_trip(station)
-    @entry_station = nil
     deduct(@journeys[-1].fare)
   end
 
   def in_journey? #move
-    if @entry_station != nil then
-      return true
-    else false
-    end
+    !@journeys[-1].complete? unless @journeys.empty?
   end
 
   private
+
+  def create_missing_journey(station)
+    @journeys << Journey.new(nil, station, true) if @journeys.empty? || !in_journey?()
+  end
 
   def over_limit?(amount)
     raise "You have reached your top-up limit of #{MAXIMUM_BALANCE}." if @balance + amount > MAXIMUM_BALANCE
