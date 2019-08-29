@@ -10,7 +10,7 @@ describe Oystercard do
 
   describe '#default_behaviour' do
     it 'checks if the hash is empty by default' do
-    expect(subject.journey).to eq({})
+    expect(subject.journeys).to be_empty
     end
     end
 
@@ -32,10 +32,6 @@ describe Oystercard do
     it "touch in requires MINIMUM_AMOUNT_TO_TOUCH_IN balance" do
       expect { subject.touch_in(station) }.to raise_error "Failed - you do not have minimunm balance of #{Oystercard::MINIMUM_AMOUNT_TO_TOUCH_IN}."
     end
-    it "touching in will reduce balance by MINIMUM_AMOUNT_TO_TOUCH_IN" do
-      subject.top_up(Oystercard::MINIMUM_AMOUNT_TO_TOUCH_IN)
-      expect { subject.touch_in(station) }.to change { subject.balance }.by(-Oystercard::MINIMUM_AMOUNT_TO_TOUCH_IN)
-    end
 
   end
   describe "#touchin and out?" do
@@ -45,7 +41,7 @@ describe Oystercard do
     end
     it 'stores the journey in a hash' do
     subject.touch_out(station2)
-    expect(subject.journey).to eq({station => station2})
+    expect(subject.journeys[-1].journey).to eq({entry_station: station, exit_station: station2, complete: true})
     end
 
     it "accepts the entry station" do

@@ -3,11 +3,11 @@ class Oystercard
   MINIMUM_BALANCE = -3 # tests cannot handle posirive limits, needs to be 0 or negative
   MINIMUM_AMOUNT_TO_TOUCH_IN = 1
 
-  attr_reader :balance, :entry_station, :journey
+  attr_reader :balance, :entry_station, :journeys
 
   def initialize
     @balance = 0
-    @journey = {} # change to array?
+    @journeys = [] # change to array?
   end
 
   def top_up(amount)
@@ -16,14 +16,18 @@ class Oystercard
   end
 
   def touch_in(station)
-    sufficient_balance_to_touch_in # move - constant might be better defined in journey?
-    deduct(MINIMUM_AMOUNT_TO_TOUCH_IN) #move?
-    @entry_station = station #move?
+    sufficient_balance_to_touch_in
+    deduct(@journeys[-1].fare) unless @journeys.empty?
+    @journeys << Journey.new(station)
+    @entry_station = station
   end
 
   def touch_out(station)
-    @journey.store(@entry_station, station) #change?
-    @entry_station = nil #nmove?
+    @journeys << Journey.new(nil, station, true) if @journeys.empty?
+    @journeys << Journey.new(nil, station, true) if @journeys[-1].journey[:complete] == true
+    @journeys[-1].end_trip(station)
+    @entry_station = nil
+    deduct(@journeys[-1].fare)
   end
 
   def in_journey? #move
