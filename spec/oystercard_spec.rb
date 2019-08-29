@@ -2,17 +2,10 @@ require "oystercard"
 
 describe Oystercard do
   it { is_expected.to respond_to(:top_up).with(1).argument }
-  it { is_expected.to respond_to(:in_journey?) }
   it { is_expected.to respond_to(:touch_in) }
   it {is_expected.to respond_to(:touch_out).with(1).argument}
   let(:station) { double :station }
   let(:station2) { double :station }
-
-  describe '#default_behaviour' do
-    it 'checks if the hash is empty by default' do
-    expect(subject.journeys).to be_empty
-    end
-    end
 
   describe "#balance" do
     it "has a default balance of 0 when intiliazed" do
@@ -38,22 +31,6 @@ describe Oystercard do
     before (:each) do
       subject.top_up(Oystercard::MINIMUM_AMOUNT_TO_TOUCH_IN)
       subject.touch_in(station)
-    end
-    it 'stores the journey in a hash' do
-    subject.touch_out(station2)
-    expect(subject.journeys[-1].journey).to eq({entry_station: station, exit_station: station2, complete: true})
-    end
-
-    it "entry station is nil after touch_out" do
-      subject.touch_out(station)
-      expect(subject.entry_station).to be nil
-    end
-    it "in_journey is true when touching in" do
-      expect(subject.in_journey?).to be true
-    end
-    it "in_journey is false when touching out" do
-      subject.touch_out(station)
-      expect(subject.in_journey?).to be false
     end
   end
 end

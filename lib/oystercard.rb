@@ -1,3 +1,7 @@
+require_relative "journey"
+require_relative "station"
+require_relative 'journeylog'
+
 class Oystercard
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = -3 # tests cannot handle posirive limits, needs to be 0 or negative
@@ -7,7 +11,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @journeys = [] # change to array?
+    @log = JourneyLog.new # change to array?
   end
 
   def top_up(amount)
@@ -17,25 +21,21 @@ class Oystercard
 
   def touch_in(station)
     sufficient_balance_to_touch_in
-    deduct(@journeys[-1].fare) unless @journeys.empty?
-    @journeys << Journey.new(station)
+    deduct(@log.fare) unless @log.empty? || !@log.in_journey?
+    @log.start(station)
   end
 
   def touch_out(station)
-    create_missing_journey(station)
-    @journeys[-1].end_trip(station)
-    deduct(@journeys[-1].fare)
+    @log.create_missing_journey(station)
+    @log.finish(station)
+    deduct(@log.fare)
   end
 
-  def in_journey? #move
-    !@journeys[-1].complete? unless @journeys.empty?
+  def history
+    @log.log
   end
 
   private
-
-  def create_missing_journey(station)
-    @journeys << Journey.new(nil, station, true) if @journeys.empty? || !in_journey?()
-  end
 
   def over_limit?(amount)
     raise "You have reached your top-up limit of #{MAXIMUM_BALANCE}." if @balance + amount > MAXIMUM_BALANCE

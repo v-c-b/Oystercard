@@ -1,6 +1,7 @@
 require "journey"
 require "oystercard"
 require "station"
+require 'journeylog'
 
 describe "Touchout without touching in" do
   it "charges PENALTY_FARE" do
