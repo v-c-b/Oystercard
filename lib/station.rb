@@ -1,10 +1,9 @@
+# Station holds the station information
 class Station
-attr_reader :name, :zone
+  attr_reader :name, :zone
 
-def initialize(name = "Central Station", zone = 1 )
-  @name = name
-  @zone = zone
-end
-
-
+  def initialize(name = 'Central Station', zone = 1)
+    @name = name
+    @zone = zone
+  end
 end

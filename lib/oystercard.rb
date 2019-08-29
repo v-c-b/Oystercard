@@ -1,10 +1,10 @@
-require_relative "journey"
-require_relative "station"
+require_relative 'journey'
+require_relative 'station'
 require_relative 'journeylog'
-
+# Oystercard holds balance and touches in and out of stations
 class Oystercard
   MAXIMUM_BALANCE = 90
-  MINIMUM_BALANCE = -3 # tests cannot handle posirive limits, needs to be 0 or negative
+  MINIMUM_BALANCE = -3 # tests cannot handle positive limits
   MINIMUM_AMOUNT_TO_TOUCH_IN = 1
 
   attr_reader :balance, :entry_station, :journeys
