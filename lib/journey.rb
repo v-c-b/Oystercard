@@ -13,15 +13,21 @@ class Journey
   end
 
   def fare
-    if @journey[:entry_station] && !@journey[:exit_station]
-      end_trip()
-      return PENALTY_FARE
-    end
-    return PENALTY_FARE if !@journey[:entry_station] && @journey[:exit_station]
+    return check_penalty if check_penalty
     1
   end
 
   def complete?
     @journey[:complete]
   end
+
+  private
+
+  def check_penalty
+    return if @journey[:entry_station] && @journey[:exit_station]
+    end_trip() if @journey[:entry_station] && !@journey[:exit_station]
+    return PENALTY_FARE
+  end
+
+
 end

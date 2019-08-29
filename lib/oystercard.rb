@@ -21,7 +21,7 @@ class Oystercard
 
   def touch_in(station)
     sufficient_balance_to_touch_in
-    deduct(@log.fare) unless @log.empty? || !@log.in_journey?
+    deduct(@log.fare) if !@log.empty? || @log.in_journey?
     @log.start(station)
   end
 

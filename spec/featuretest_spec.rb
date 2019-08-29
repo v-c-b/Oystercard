@@ -49,5 +49,17 @@ describe "Touching in and out" do
     card.touch_in(station1)
     expect {card.touch_out(station2)}.to change{card.balance}.by -1
   end
+end
 
+describe "Touching in and out twice" do
+  it "charges 1" do
+    card = Oystercard.new
+    station1 = Station.new
+    station2 = Station.new("Picadilly",2)
+    card.top_up(10)
+    card.touch_in(station1)
+    card.touch_out(station2)
+    card.touch_in(station1)
+    expect {card.touch_out(station2)}.to change{card.balance}.by -1
+  end
 end
